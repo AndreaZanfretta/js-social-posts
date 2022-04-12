@@ -1,3 +1,20 @@
+/* utility */
+function formatDate(date){
+    date = date.split("-");
+    let newDate = date[2] + "-" + date[1] + "-" + date[0];
+    return newDate;
+}
+
+function nullUserImage(name){
+    name = name.split(" ");
+    console.log (name)
+    let newName = [];
+    for(let i = 0; i< name.length; i++){
+        newName[i] = name[i].charAt(0);  
+    }
+    console.log(newName)
+        return newName;
+}
 /* main */
 let container = document.getElementById("container");
 let postDiv = document.createElement("div");
@@ -33,19 +50,20 @@ for(let i = 0; i < like.length; i++){
 function generaPost(){
 
     posts.forEach((post)=>{
-        let date = post.created;
-        date = date.split("-");
-        let newDate = date[2] + "-" + date[1] + "-" + date[0];
+        let altImg;
+        if(post.author.image === null){
+            altImg = nullUserImage(post.author.name).toString();
+        }
         container.innerHTML += `
             <div class="post">
                 <div class="post__header">
                     <div class="post-meta">                    
                         <div class="post-meta__icon">
-                            <img class="profile-pic" src="${post.author.image}" alt="${post.author.name}">                    
+                            <img class="profile-pic" src="${post.author.image}" alt="${altImg}">                    
                         </div>
                         <div class="post-meta__data">
                             <div class="post-meta__author">${post.author.name}</div>
-                            <div class="post-meta__time">${newDate}</div>
+                            <div class="post-meta__time">${formatDate(post.created)}</div>
                         </div>                    
                     </div>
                 </div>
@@ -69,6 +87,7 @@ function generaPost(){
             </div>
 
         `;
+        console.log(post.author.image)
     })
 
 }
