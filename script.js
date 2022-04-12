@@ -33,8 +33,10 @@ for(let i = 0; i < like.length; i++){
 function generaPost(){
 
     posts.forEach((post)=>{
+        let date = post.created;
+        date = date.split("-");
+        let newDate = date[2] + "-" + date[1] + "-" + date[0];
         container.innerHTML += `
-        
             <div class="post">
                 <div class="post__header">
                     <div class="post-meta">                    
@@ -43,7 +45,7 @@ function generaPost(){
                         </div>
                         <div class="post-meta__data">
                             <div class="post-meta__author">${post.author.name}</div>
-                            <div class="post-meta__time">${post.created}</div>
+                            <div class="post-meta__time">${newDate}</div>
                         </div>                    
                     </div>
                 </div>
