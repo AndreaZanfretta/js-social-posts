@@ -10,7 +10,7 @@ function nullUserImage(name){
     console.log (name)
     let newName = [];
     for(let i = 0; i< name.length; i++){
-        newName[i] = name[i].charAt(0);  
+        newName += name[i].charAt(0);  
     }
     console.log(newName)
         return newName;
@@ -24,15 +24,23 @@ generaPost();
 let like = document.querySelectorAll(".like-button");
 for(let i = 0; i < like.length; i++){
     like[i].addEventListener("click", function(){
+        const check = this.classList.contains("like-button--liked")
+        console.log(check)
         this.classList.add("like-button--liked");
-        posts[i].likes++;
+
+        let c =posts[i].likes;
+        if(!check){
+            posts[i].likes++;
+            if(!likedPost.includes(posts[i].id)){
+                likedPost.push(posts[i].id)
+            }
+        }else{
+            posts[i].likes--;
+            this.classList.remove("like-button--liked");
+        }
         let counter = posts[i].likes;
-        console.log(counter)
         let counterLike = document.querySelectorAll(".js-likes-counter");
         counterLike[i].innerHTML = counter;
-        if(!likedPost.includes(posts[i].id)){
-            likedPost.push(posts[i].id)
-        }
         console.log(likedPost)
     });
     
@@ -40,26 +48,17 @@ for(let i = 0; i < like.length; i++){
 
 
 
-/* funzione mi piace */
-/* function getLikes(i){
-    this.classList.add("like-button--liked");
-    console.log(this)
-} */
 
 /*funzione genera post */
 function generaPost(){
 
     posts.forEach((post)=>{
-        let altImg;
-        if(post.author.image === null){
-            altImg = nullUserImage(post.author.name).toString();
-        }
         container.innerHTML += `
             <div class="post">
                 <div class="post__header">
                     <div class="post-meta">                    
                         <div class="post-meta__icon">
-                            <img class="profile-pic" src="${post.author.image}" alt="${altImg}">                    
+                            ${post.author.image ? `<img class="profile-pic" src="${post.author.image}" alt="">` : `<div class="profile-pic-default"><span>${nullUserImage(post.author.name)}</span></div>`}           
                         </div>
                         <div class="post-meta__data">
                             <div class="post-meta__author">${post.author.name}</div>
@@ -80,7 +79,7 @@ function generaPost(){
                             </a>
                         </div>
                         <div class="likes__counter">
-                            Piace a <b id="like-counter-1" class="js-likes-counter">${post.likes}</b> persone
+                            Piace a <b id="like-counter-${post.id}" class="js-likes-counter">${post.likes}</b> persone
                         </div>
                     </div> 
                 </div>            
